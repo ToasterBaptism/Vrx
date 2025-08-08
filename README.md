@@ -19,7 +19,7 @@ VrxTheater is an Android application that allows users to play installed Android
 
 ## Download
 
-You can download the latest APK from our [website](https://work-1-htqhqetttwwmwtyr.prod-runtime.all-hands.dev:12000/).
+You can download the latest APK from our [website](https://work-2-htqhqetttwwmwtyr.prod-runtime.all-hands.dev:12001/).
 
 ## Building from Source
 
