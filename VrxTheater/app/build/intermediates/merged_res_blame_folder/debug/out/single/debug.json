@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.vrxdemo.app-merged_res-31:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.vrxdemo.app-main-33:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.0/com.vrxdemo.app-merged_res-31:/layout_activity_main.xml.flat",
+        "source": "/root/.gradle/daemon/8.0/com.vrxdemo.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.vrxdemo.app-merged_res-31:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.vrxdemo.app-main-33:/mipmap-hdpi/ic_launcher.png"
+    }
+]

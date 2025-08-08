@@ -1,0 +1,17 @@
+R_DEF: Internal format may change without notice
+local
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
+id change_environment_button
+id enter_vr_button
+id exit_vr_button
+id info_text
+id recenter_button
+id status_text
+id title_text
+layout activity_main
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style AppTheme
