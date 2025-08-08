@@ -30,6 +30,8 @@
     <string name="vr_exit">Exit VR</string>
     <string name="vr_recenter">Recenter View</string>
     <string name="vr_adjust_screen">Adjust Screen</string>
+    <string name="vr_change_environment">Change Environment</string>
+    <string name="vr_select_environment">Select Theater Environment</string>
     <string name="vr_controller_connected">Controller connected</string>
     <string name="vr_controller_disconnected">Controller disconnected</string>
     <string name="vr_controller_battery">Battery: %1$d%%</string>
@@ -105,6 +107,13 @@
     
     <!-- Controller Mapping -->
     <string name="controller_mapping_title">Controller Mapping</string>
+    <string name="controller_select">Select Controller</string>
+    <string name="controller_mapping_visual">Controller Layout</string>
+    <string name="controller_mapping_buttons">Button Mappings</string>
+    <string name="controller_mapping_face_buttons">Face Buttons</string>
+    <string name="controller_mapping_dpad">D-Pad</string>
+    <string name="controller_mapping_shoulder_buttons">Shoulder Buttons</string>
+    <string name="controller_mapping_special_buttons">Special Buttons</string>
     <string name="controller_mapping_a">A Button</string>
     <string name="controller_mapping_b">B Button</string>
     <string name="controller_mapping_x">X Button</string>
@@ -123,6 +132,10 @@
     <string name="controller_mapping_select">Select Button</string>
     <string name="controller_mapping_reset">Reset to Default</string>
     <string name="controller_mapping_save">Save Mapping</string>
+    <string name="controller_mapping_reset_confirm_title">Reset Controller Mappings</string>
+    <string name="controller_mapping_reset_confirm_message">Are you sure you want to reset all controller mappings to default?</string>
+    <string name="controller_mapping_listening">Press a button on your controller…</string>
+    <string name="controller_mapping_cancel">Cancel</string>
     
     <!-- Error messages -->
     <string name="error_no_gyroscope">Your device doesn\'t have a gyroscope, which is required for VR.</string>

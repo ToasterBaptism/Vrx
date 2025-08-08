@@ -22,6 +22,7 @@ import com.vrxtheater.data.repository.SettingsRepository
 import com.vrxtheater.databinding.ActivityVrBinding
 import com.vrxtheater.services.VrProjectionService
 import com.vrxtheater.vr.renderer.VrRenderer
+import com.vrxtheater.vr.scene.TheaterEnvironmentType
 import com.vrxtheater.vr.util.SensorFusion
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -38,6 +39,7 @@ class VrActivity : AppCompatActivity() {
     private var mediaProjectionManager: MediaProjectionManager? = null
     private var mediaProjection: MediaProjection? = null
     private var packageName: String? = null
+    private var isTestPattern = false
     
     @Inject
     lateinit var settingsRepository: SettingsRepository
@@ -87,6 +89,9 @@ class VrActivity : AppCompatActivity() {
         // Get package name from intent
         packageName = intent.getStringExtra("package_name")
         
+        // Check if this is a test pattern request
+        isTestPattern = intent.getBooleanExtra("test_pattern", false)
+        
         // Initialize sensor fusion
         val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorFusion = SensorFusion(sensorManager)
@@ -97,8 +102,17 @@ class VrActivity : AppCompatActivity() {
         // Set up UI controls
         setupControls()
         
-        // Request media projection
-        requestMediaProjection()
+        // Request media projection if not in test pattern mode
+        if (!isTestPattern) {
+            requestMediaProjection()
+        } else {
+            // Show VR view immediately for test pattern
+            binding.vrSurfaceView.visibility = View.VISIBLE
+            binding.loadingLayout.visibility = View.GONE
+            
+            // Enable test pattern in renderer
+            vrRenderer.setTestPatternMode(true)
+        }
     }
     
     private fun initializeVrRenderer() {
@@ -131,6 +145,22 @@ class VrActivity : AppCompatActivity() {
         binding.exitButton.setOnClickListener {
             finish()
         }
+        
+        // Environment button
+        binding.environmentButton.setOnClickListener {
+            showEnvironmentSelectionDialog()
+        }
+    }
+    
+    private fun showEnvironmentSelectionDialog() {
+        val currentEnvironment = vrRenderer.getCurrentEnvironmentType()
+        
+        EnvironmentSelectionDialog(
+            this,
+            currentEnvironment
+        ) { selectedEnvironment ->
+            vrRenderer.changeEnvironment(selectedEnvironment)
+        }.show()
     }
     
     private fun requestMediaProjection() {
@@ -179,8 +209,10 @@ class VrActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         
-        // Stop projection service
-        stopService(Intent(this, VrProjectionService::class.java))
+        // Stop projection service if not in test pattern mode
+        if (!isTestPattern) {
+            stopService(Intent(this, VrProjectionService::class.java))
+        }
         
         // Clean up resources
         vrRenderer.onDestroy()

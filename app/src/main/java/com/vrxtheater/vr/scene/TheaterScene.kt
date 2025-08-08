@@ -1,8 +1,12 @@
 package com.vrxtheater.vr.scene
 
+import android.content.Context
 import android.graphics.Color
 import com.vrxtheater.data.models.VrSettings
+import com.vrxtheater.vr.util.TextureHelper
 import org.rajawali3d.Object3D
+import org.rajawali3d.lights.DirectionalLight
+import org.rajawali3d.lights.PointLight
 import org.rajawali3d.materials.Material
 import org.rajawali3d.materials.methods.DiffuseMethod
 import org.rajawali3d.materials.textures.ATexture
@@ -18,132 +22,52 @@ import org.rajawali3d.renderer.Renderer
  */
 class TheaterScene(
     private val renderer: Renderer,
+    private val context: Context,
     private var settings: VrSettings
 ) : Object3D() {
     
     // Scene objects
-    private lateinit var floor: Object3D
-    private lateinit var ceiling: Object3D
-    private lateinit var leftWall: Object3D
-    private lateinit var rightWall: Object3D
-    private lateinit var backWall: Object3D
     private lateinit var screen: Object3D
     private lateinit var screenFrame: Object3D
-    private lateinit var seats: List<Object3D>
     
-    // Materials
-    private lateinit var floorMaterial: Material
-    private lateinit var wallMaterial: Material
-    private lateinit var ceilingMaterial: Material
+    // Environment
+    private val theaterEnvironment: TheaterEnvironment
+    private var currentEnvironmentType = TheaterEnvironmentType.CLASSIC_THEATER
+    private var environmentObjects = mutableListOf<Object3D>()
+    
+    // Texture helper
+    private val textureHelper = TextureHelper(context)
+    
+    // Screen material
     private lateinit var screenMaterial: Material
     private lateinit var screenFrameMaterial: Material
-    private lateinit var seatMaterial: Material
     
     init {
-        // Initialize the theater scene
-        createMaterials()
-        createTheaterRoom()
+        // Initialize the theater environment
+        theaterEnvironment = TheaterEnvironment(context, textureHelper)
+        
+        // Create screen and frame
+        createScreenMaterials()
         createScreen()
-        createSeats()
+        
+        // Create initial environment
+        createEnvironment(TheaterEnvironmentType.CLASSIC_THEATER)
         
         // Apply initial settings
         updateSettings(settings)
     }
     
     /**
-     * Creates materials for the theater objects
+     * Creates materials for the screen
      */
-    private fun createMaterials() {
-        // Floor material
-        floorMaterial = Material()
-        floorMaterial.colorInfluence = 0f
-        floorMaterial.diffuseMethod = DiffuseMethod.Lambert()
-        try {
-            val floorTexture = Texture("floorTexture", R.drawable.theater_floor)
-            floorMaterial.addTexture(floorTexture)
-        } catch (e: ATexture.TextureException) {
-            e.printStackTrace()
-            floorMaterial.diffuseColor = Color.rgb(33, 33, 33)
-        }
-        
-        // Wall material
-        wallMaterial = Material()
-        wallMaterial.colorInfluence = 0f
-        wallMaterial.diffuseMethod = DiffuseMethod.Lambert()
-        try {
-            val wallTexture = Texture("wallTexture", R.drawable.theater_wall)
-            wallMaterial.addTexture(wallTexture)
-        } catch (e: ATexture.TextureException) {
-            e.printStackTrace()
-            wallMaterial.diffuseColor = Color.rgb(26, 26, 26)
-        }
-        
-        // Ceiling material
-        ceilingMaterial = Material()
-        ceilingMaterial.colorInfluence = 0f
-        ceilingMaterial.diffuseMethod = DiffuseMethod.Lambert()
-        try {
-            val ceilingTexture = Texture("ceilingTexture", R.drawable.theater_ceiling)
-            ceilingMaterial.addTexture(ceilingTexture)
-        } catch (e: ATexture.TextureException) {
-            e.printStackTrace()
-            ceilingMaterial.diffuseColor = Color.rgb(13, 13, 13)
-        }
-        
+    private fun createScreenMaterials() {
         // Screen frame material
         screenFrameMaterial = Material()
         screenFrameMaterial.diffuseMethod = DiffuseMethod.Lambert()
         screenFrameMaterial.diffuseColor = Color.rgb(48, 48, 48)
         
-        // Seat material
-        seatMaterial = Material()
-        seatMaterial.diffuseMethod = DiffuseMethod.Lambert()
-        seatMaterial.diffuseColor = Color.rgb(66, 66, 66)
-    }
-    
-    /**
-     * Creates the theater room (walls, floor, ceiling)
-     */
-    private fun createTheaterRoom() {
-        // Room dimensions
-        val roomWidth = 20f
-        val roomHeight = 10f
-        val roomDepth = 25f
-        
-        // Floor
-        floor = Plane(roomWidth, roomDepth, 1, 1)
-        floor.material = floorMaterial
-        floor.rotation.x = -Math.PI.toFloat() / 2
-        floor.position = Vector3(0f, -2f, 0f)
-        addChild(floor)
-        
-        // Ceiling
-        ceiling = Plane(roomWidth, roomDepth, 1, 1)
-        ceiling.material = ceilingMaterial
-        ceiling.rotation.x = Math.PI.toFloat() / 2
-        ceiling.position = Vector3(0f, roomHeight - 2f, 0f)
-        addChild(ceiling)
-        
-        // Left wall
-        leftWall = Plane(roomDepth, roomHeight, 1, 1)
-        leftWall.material = wallMaterial
-        leftWall.rotation.y = Math.PI.toFloat() / 2
-        leftWall.position = Vector3(-roomWidth / 2, roomHeight / 2 - 2f, 0f)
-        addChild(leftWall)
-        
-        // Right wall
-        rightWall = Plane(roomDepth, roomHeight, 1, 1)
-        rightWall.material = wallMaterial
-        rightWall.rotation.y = -Math.PI.toFloat() / 2
-        rightWall.position = Vector3(roomWidth / 2, roomHeight / 2 - 2f, 0f)
-        addChild(rightWall)
-        
-        // Back wall
-        backWall = Plane(roomWidth, roomHeight, 1, 1)
-        backWall.material = wallMaterial
-        backWall.rotation.y = Math.PI.toFloat()
-        backWall.position = Vector3(0f, roomHeight / 2 - 2f, roomDepth / 2)
-        addChild(backWall)
+        // Screen material will be set by the renderer
+        screenMaterial = Material()
     }
     
     /**
@@ -196,76 +120,27 @@ class TheaterScene(
     }
     
     /**
-     * Creates theater seats
+     * Creates the theater environment
      */
-    private fun createSeats() {
-        seats = mutableListOf()
+    private fun createEnvironment(type: TheaterEnvironmentType) {
+        // Remove previous environment objects
+        environmentObjects.forEach { removeChild(it) }
+        environmentObjects.clear()
         
-        // Seat dimensions
-        val seatWidth = 1.2f
-        val seatHeight = 1.0f
-        val seatDepth = 1.0f
+        // Remove previous lights
+        renderer.currentScene.lights.clear()
         
-        // Create rows of seats
-        val rowCount = 3
-        val seatsPerRow = 7
-        val startZ = 3f
-        val rowSpacing = 2f
+        // Create new environment
+        environmentObjects = theaterEnvironment.createEnvironment(type).toMutableList()
         
-        for (row in 0 until rowCount) {
-            val z = startZ + row * rowSpacing
-            val y = -1.5f + row * 0.5f // Each row is slightly higher
-            
-            for (col in 0 until seatsPerRow) {
-                val x = (col - seatsPerRow / 2) * (seatWidth + 0.3f)
-                
-                // Create seat
-                val seat = createSeat(seatWidth, seatHeight, seatDepth)
-                seat.position = Vector3(x, y, z)
-                
-                // Add to scene and list
-                addChild(seat)
-                (seats as MutableList<Object3D>).add(seat)
-            }
-        }
-    }
-    
-    /**
-     * Creates a single theater seat
-     */
-    private fun createSeat(width: Float, height: Float, depth: Float): Object3D {
-        val seat = Object3D()
+        // Add environment objects to scene
+        environmentObjects.forEach { addChild(it) }
         
-        // Seat base
-        val base = Cube(width, height * 0.3f, depth)
-        base.material = seatMaterial
-        base.position = Vector3(0f, 0f, 0f)
-        seat.addChild(base)
+        // Add lights to scene
+        theaterEnvironment.getLights().forEach { renderer.currentScene.addLight(it) }
         
-        // Seat back
-        val back = Cube(width, height * 0.7f, depth * 0.2f)
-        back.material = seatMaterial
-        back.position = Vector3(0f, height * 0.5f, depth * 0.4f)
-        seat.addChild(back)
-        
-        // Seat arms
-        val armWidth = width * 0.1f
-        val armHeight = height * 0.3f
-        val armDepth = depth * 0.8f
-        
-        // Left arm
-        val leftArm = Cube(armWidth, armHeight, armDepth)
-        leftArm.material = seatMaterial
-        leftArm.position = Vector3(-width * 0.45f, height * 0.15f, 0f)
-        seat.addChild(leftArm)
-        
-        // Right arm
-        val rightArm = Cube(armWidth, armHeight, armDepth)
-        rightArm.material = seatMaterial
-        rightArm.position = Vector3(width * 0.45f, height * 0.15f, 0f)
-        seat.addChild(rightArm)
-        
-        return seat
+        // Update current environment type
+        currentEnvironmentType = type
     }
     
     /**
@@ -298,6 +173,16 @@ class TheaterScene(
     }
     
     /**
+     * Changes the theater environment
+     */
+    fun changeEnvironment(type: TheaterEnvironmentType) {
+        if (type != currentEnvironmentType) {
+            createEnvironment(type)
+            updateSettings(settings) // Apply current settings to new environment
+        }
+    }
+    
+    /**
      * Applies curvature to the screen
      */
     private fun applyCurvature(curvature: Float) {
@@ -315,9 +200,9 @@ class TheaterScene(
      * Updates the environment brightness
      */
     private fun updateEnvironmentBrightness(brightness: Float) {
-        // Adjust ambient light intensity
+        // Adjust light intensity
         renderer.currentScene.lights.forEach { light ->
-            light.power = brightness * 2f
+            light.power = light.power * brightness
         }
     }
     
@@ -326,5 +211,19 @@ class TheaterScene(
      */
     fun getScreenObject(): Object3D {
         return screen
+    }
+    
+    /**
+     * Returns the current environment type
+     */
+    fun getCurrentEnvironmentType(): TheaterEnvironmentType {
+        return currentEnvironmentType
+    }
+    
+    /**
+     * Returns all available environment types
+     */
+    fun getAvailableEnvironments(): List<TheaterEnvironmentType> {
+        return TheaterEnvironmentType.values().toList()
     }
 }

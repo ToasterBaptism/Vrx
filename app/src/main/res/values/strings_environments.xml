@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theater Environments -->
+    <string name="environment_classic_theater">Classic Theater</string>
+    <string name="environment_modern_theater">Modern Theater</string>
+    <string name="environment_imax_dome">IMAX Dome</string>
+    <string name="environment_outdoor_cinema">Outdoor Cinema</string>
+    <string name="environment_space_station">Space Station</string>
+    <string name="environment_underwater">Underwater</string>
+</resources>

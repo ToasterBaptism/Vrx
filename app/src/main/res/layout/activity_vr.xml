@@ -64,6 +64,18 @@
             android:layout_height="8dp" />
 
         <ImageButton
+            android:id="@+id/environmentButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_button_background"
+            android:contentDescription="@string/vr_change_environment"
+            android:src="@drawable/ic_environment" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <ImageButton
             android:id="@+id/exitButton"
             android:layout_width="48dp"
             android:layout_height="48dp"

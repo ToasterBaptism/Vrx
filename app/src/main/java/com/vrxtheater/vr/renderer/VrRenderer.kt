@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.SurfaceTexture
 import android.opengl.GLES20
 import android.opengl.Matrix
+import android.view.MotionEvent
 import android.view.Surface
 import com.vrxtheater.data.models.VrSettings
+import com.vrxtheater.vr.scene.TheaterEnvironmentType
 import com.vrxtheater.vr.scene.TheaterScene
 import com.vrxtheater.vr.util.SensorFusion
 import com.vrxtheater.vr.util.TextureHelper
@@ -13,6 +15,7 @@ import org.rajawali3d.Object3D
 import org.rajawali3d.cameras.Camera
 import org.rajawali3d.lights.DirectionalLight
 import org.rajawali3d.materials.Material
+import org.rajawali3d.materials.methods.DiffuseMethod
 import org.rajawali3d.materials.textures.ATexture
 import org.rajawali3d.materials.textures.StreamingTexture
 import org.rajawali3d.math.Matrix4
@@ -60,20 +63,15 @@ class VrRenderer(
     // Flags
     private var isScreenTextureInitialized = false
     private var isRecenterRequested = false
+    private var isTestPattern = false
+    
+    // Callbacks
+    private var onGazeListener: ((Object3D) -> Unit)? = null
     
     override fun initScene() {
         // Initialize scene
-        theaterScene = TheaterScene(this, vrSettings)
+        theaterScene = TheaterScene(this, context, vrSettings)
         currentScene.addChild(theaterScene)
-        
-        // Add lighting
-        val mainLight = DirectionalLight(0.1f, -1.0f, 0.2f)
-        mainLight.power = 1.5f
-        currentScene.addLight(mainLight)
-        
-        val fillLight = DirectionalLight(-0.1f, -0.1f, -0.1f)
-        fillLight.power = 0.5f
-        currentScene.addLight(fillLight)
         
         // Create stereo cameras
         setupStereoCameras()
@@ -87,11 +85,13 @@ class VrRenderer(
             // Handle gaze interaction
             if (object3D == screenObject) {
                 // Screen was gazed at
+                onGazeListener?.invoke(object3D)
             }
         }
         
         // Add screen to theater
         screenObject = theaterScene.getScreenObject()
+        screenObject.material = screenMaterial
         
         // Initial head position
         resetHeadPosition()
@@ -128,6 +128,7 @@ class VrRenderer(
         // Create material for the screen
         screenMaterial = Material()
         screenMaterial.colorInfluence = 0f
+        screenMaterial.diffuseMethod = DiffuseMethod.Lambert()
         
         // Create streaming texture for the screen
         screenTexture = StreamingTexture("screenTexture")
@@ -148,14 +149,16 @@ class VrRenderer(
         updateHeadRotation()
         
         // Initialize screen texture if not already done
-        if (!isScreenTextureInitialized) {
+        if (!isScreenTextureInitialized && !isTestPattern) {
             val surface = Surface(surfaceTexture)
             onScreenTextureReady(surface)
             isScreenTextureInitialized = true
         }
         
-        // Update surface texture
-        surfaceTexture.updateTexImage()
+        // Update surface texture if not in test pattern mode
+        if (!isTestPattern) {
+            surfaceTexture.updateTexImage()
+        }
         
         // Render left eye
         renderEye(true)
@@ -255,6 +258,62 @@ class VrRenderer(
         
         // Update theater scene
         theaterScene.updateSettings(settings)
+    }
+    
+    /**
+     * Changes the theater environment
+     */
+    fun changeEnvironment(type: TheaterEnvironmentType) {
+        theaterScene.changeEnvironment(type)
+    }
+    
+    /**
+     * Returns the current environment type
+     */
+    fun getCurrentEnvironmentType(): TheaterEnvironmentType {
+        return theaterScene.getCurrentEnvironmentType()
+    }
+    
+    /**
+     * Returns all available environment types
+     */
+    fun getAvailableEnvironments(): List<TheaterEnvironmentType> {
+        return theaterScene.getAvailableEnvironments()
+    }
+    
+    /**
+     * Sets the test pattern mode
+     */
+    fun setTestPatternMode(enabled: Boolean) {
+        isTestPattern = enabled
+        
+        if (enabled) {
+            // Create a test pattern material
+            val testMaterial = Material()
+            testMaterial.diffuseMethod = DiffuseMethod.Lambert()
+            
+            try {
+                val testTexture = TextureHelper.loadTexture(context, "textures/test_pattern.jpg")
+                testMaterial.addTexture(testTexture)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Fallback to a colored material
+                testMaterial.diffuseColor = android.graphics.Color.rgb(255, 0, 0)
+            }
+            
+            // Apply test pattern to screen
+            screenObject.material = testMaterial
+        } else {
+            // Restore streaming texture
+            screenObject.material = screenMaterial
+        }
+    }
+    
+    /**
+     * Sets a gaze listener
+     */
+    fun setOnGazeListener(listener: (Object3D) -> Unit) {
+        onGazeListener = listener
     }
     
     /**
