@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  android-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../:/workspace
+    environment:
+      - ANDROID_DEV_HOME=/opt/android-dev
+      - JAVA_HOME=/opt/android-dev/jdk
+      - ANDROID_SDK_ROOT=/opt/android-dev/android-sdk
+      - ANDROID_HOME=/opt/android-dev/android-sdk
+      - ANDROID_NDK_HOME=/opt/android-dev/android-sdk/ndk/25.2.9519653
+      - GRADLE_HOME=/opt/android-dev/gradle
+    working_dir: /workspace
+    command: bash -c "source /opt/android-dev/env-setup.sh && bash"
