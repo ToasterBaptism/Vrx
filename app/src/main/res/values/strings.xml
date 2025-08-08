@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VRX Theater</string>
+    
+    <!-- Main UI -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_calibration">VR Calibration</string>
+    <string name="title_activity_diagnostics">Diagnostics</string>
+    <string name="title_activity_vr">VR Theater</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_games">Games</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_calibration">Calibration</string>
+    <string name="nav_diagnostics">Diagnostics</string>
+    
+    <!-- Game launcher -->
+    <string name="games_title">Select a Game</string>
+    <string name="games_empty">No games found</string>
+    <string name="games_loading">Scanning for games…</string>
+    <string name="games_launch">Launch in VR</string>
+    <string name="games_refresh">Refresh</string>
+    <string name="games_last_played">Last played: %1$s</string>
+    <string name="games_never_played">Never played</string>
+    
+    <!-- VR Theater -->
+    <string name="vr_loading">Preparing VR environment…</string>
+    <string name="vr_enter">Enter VR Mode</string>
+    <string name="vr_exit">Exit VR</string>
+    <string name="vr_recenter">Recenter View</string>
+    <string name="vr_adjust_screen">Adjust Screen</string>
+    <string name="vr_controller_connected">Controller connected</string>
+    <string name="vr_controller_disconnected">Controller disconnected</string>
+    <string name="vr_controller_battery">Battery: %1$d%%</string>
+    
+    <!-- Calibration -->
+    <string name="calibration_title">VR Calibration</string>
+    <string name="calibration_ipd">Interpupillary Distance (IPD)</string>
+    <string name="calibration_ipd_value">%1$.1f mm</string>
+    <string name="calibration_lens_offset_x">Horizontal Lens Offset</string>
+    <string name="calibration_lens_offset_y">Vertical Lens Offset</string>
+    <string name="calibration_distortion">Barrel Distortion</string>
+    <string name="calibration_distortion_value">%1$.2f</string>
+    <string name="calibration_tracking">Head Tracking Smoothing</string>
+    <string name="calibration_tracking_value">%1$.1f</string>
+    <string name="calibration_reset">Reset to Default</string>
+    <string name="calibration_save">Save Settings</string>
+    <string name="calibration_test">Test Settings</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_category_vr">VR Settings</string>
+    <string name="settings_category_display">Display</string>
+    <string name="settings_category_audio">Audio</string>
+    <string name="settings_category_controller">Controller</string>
+    <string name="settings_category_advanced">Advanced</string>
+    
+    <string name="settings_screen_distance">Screen Distance</string>
+    <string name="settings_screen_size">Screen Size</string>
+    <string name="settings_screen_curve">Screen Curvature</string>
+    <string name="settings_screen_tilt">Screen Tilt</string>
+    <string name="settings_environment_brightness">Environment Brightness</string>
+    <string name="settings_comfort_mode">Comfort Mode</string>
+    <string name="settings_comfort_mode_summary">Reduces motion for more comfortable experience</string>
+    <string name="settings_ambient_sound">Ambient Sound</string>
+    <string name="settings_ambient_sound_summary">Play subtle ambient sounds in the theater</string>
+    <string name="settings_controller_vibration">Controller Vibration</string>
+    <string name="settings_controller_vibration_summary">Enable haptic feedback for controllers</string>
+    <string name="settings_controller_mapping">Controller Mapping</string>
+    <string name="settings_controller_mapping_summary">Customize controller button mappings</string>
+    <string name="settings_performance_mode">Performance Mode</string>
+    <string name="settings_performance_mode_summary">Optimize for performance or quality</string>
+    <string name="settings_auto_launch">Auto-launch VR</string>
+    <string name="settings_auto_launch_summary">Automatically enter VR mode when launching a game</string>
+    
+    <!-- Diagnostics -->
+    <string name="diagnostics_title">System Diagnostics</string>
+    <string name="diagnostics_device">Device Information</string>
+    <string name="diagnostics_sensors">Sensor Status</string>
+    <string name="diagnostics_gyroscope">Gyroscope</string>
+    <string name="diagnostics_accelerometer">Accelerometer</string>
+    <string name="diagnostics_magnetometer">Magnetometer</string>
+    <string name="diagnostics_screen">Screen</string>
+    <string name="diagnostics_resolution">Resolution</string>
+    <string name="diagnostics_refresh_rate">Refresh Rate</string>
+    <string name="diagnostics_controllers">Controllers</string>
+    <string name="diagnostics_test_tracking">Test Head Tracking</string>
+    <string name="diagnostics_test_rendering">Test VR Rendering</string>
+    <string name="diagnostics_test_controller">Test Controller Input</string>
+    <string name="diagnostics_status_available">Available</string>
+    <string name="diagnostics_status_unavailable">Unavailable</string>
+    <string name="diagnostics_status_connected">Connected</string>
+    <string name="diagnostics_status_disconnected">Disconnected</string>
+    
+    <!-- Permissions -->
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_usage_stats_rationale">VRX Theater needs access to usage statistics to detect installed games.</string>
+    <string name="permission_overlay_rationale">VRX Theater needs permission to draw over other apps to display VR content.</string>
+    <string name="permission_storage_rationale">VRX Theater needs access to storage to save settings and screenshots.</string>
+    <string name="permission_bluetooth_rationale">VRX Theater needs Bluetooth permissions to connect to wireless controllers.</string>
+    <string name="permission_grant">Grant Permission</string>
+    <string name="permission_settings">Open Settings</string>
+    <string name="permission_cancel">Cancel</string>
+    
+    <!-- Controller Mapping -->
+    <string name="controller_mapping_title">Controller Mapping</string>
+    <string name="controller_mapping_a">A Button</string>
+    <string name="controller_mapping_b">B Button</string>
+    <string name="controller_mapping_x">X Button</string>
+    <string name="controller_mapping_y">Y Button</string>
+    <string name="controller_mapping_l1">L1 Button</string>
+    <string name="controller_mapping_r1">R1 Button</string>
+    <string name="controller_mapping_l2">L2 Trigger</string>
+    <string name="controller_mapping_r2">R2 Trigger</string>
+    <string name="controller_mapping_l3">L3 Button</string>
+    <string name="controller_mapping_r3">R3 Button</string>
+    <string name="controller_mapping_dpad_up">D-Pad Up</string>
+    <string name="controller_mapping_dpad_down">D-Pad Down</string>
+    <string name="controller_mapping_dpad_left">D-Pad Left</string>
+    <string name="controller_mapping_dpad_right">D-Pad Right</string>
+    <string name="controller_mapping_start">Start Button</string>
+    <string name="controller_mapping_select">Select Button</string>
+    <string name="controller_mapping_reset">Reset to Default</string>
+    <string name="controller_mapping_save">Save Mapping</string>
+    
+    <!-- Error messages -->
+    <string name="error_no_gyroscope">Your device doesn\'t have a gyroscope, which is required for VR.</string>
+    <string name="error_no_accelerometer">Your device doesn\'t have an accelerometer, which is required for VR.</string>
+    <string name="error_low_resolution">Your device\'s screen resolution is too low for a good VR experience.</string>
+    <string name="error_launch_failed">Failed to launch the selected game.</string>
+    <string name="error_vr_initialization">Failed to initialize VR environment.</string>
+    <string name="error_permission_denied">Cannot proceed without required permissions.</string>
+    
+    <!-- Misc -->
+    <string name="action_continue">Continue</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_retry">Retry</string>
+</resources>

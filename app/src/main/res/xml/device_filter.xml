@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generic HID devices -->
+    <usb-device vendor-id="1046" /> <!-- Xbox controllers -->
+    <usb-device vendor-id="1118" /> <!-- Microsoft controllers -->
+    <usb-device vendor-id="121" />  <!-- Nintendo controllers -->
+    <usb-device vendor-id="1356" /> <!-- Sony PlayStation controllers -->
+    <usb-device vendor-id="1133" /> <!-- Logitech controllers -->
+    <usb-device vendor-id="3695" /> <!-- Generic gamepad -->
+    <usb-device vendor-id="9025" /> <!-- 8BitDo controllers -->
+    <usb-device vendor-id="1411" /> <!-- Harmonix/Guitar Hero controllers -->
+    <usb-device vendor-id="121" product-id="6157" /> <!-- Nintendo Switch Pro Controller -->
+    <usb-device vendor-id="1406" product-id="774" /> <!-- Thrustmaster controllers -->
+    <usb-device vendor-id="1118" product-id="765" /> <!-- Microsoft Xbox One controller -->
+    <usb-device vendor-id="1118" product-id="736" /> <!-- Microsoft Xbox 360 controller -->
+    <usb-device vendor-id="1356" product-id="1476" /> <!-- Sony DualShock 4 -->
+    <usb-device vendor-id="1356" product-id="3302" /> <!-- Sony DualSense -->
+</resources>
